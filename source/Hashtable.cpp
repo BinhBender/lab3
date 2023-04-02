@@ -6,10 +6,7 @@ HashTable::HashTable(){
 	//Making it larger will have less chainning but more memory space
 	//Smaller will involve more chaining but more space filled up
 	maxsize = 32;
-	table = new HTNode*[maxsize];
-		
-	table = {nullptr};
-
+	table = new HTNode*[maxsize]();
 
 
 }
@@ -25,12 +22,17 @@ HashTable::~HashTable(){
 		while(deleter != nullptr){
 			HTNode* holder = deleter;
 			
-			delete holder;
+			//moves to the next node before it is destroyed
 			deleter = deleter->next;
+			
+			delete holder;
 		}
+		
+		table[i] = nullptr;
 	}
 	
-	delete table;
+	delete[] table;
+	table = nullptr;
 }	
 
 int HashTable::hash_code(char input){
@@ -46,6 +48,7 @@ int HashTable::hash_code(char input){
 	
 	return hash;
 }
+
 void HashTable::insert(char input){
 	//find index based on input
 	int h = hash_code(input);
@@ -56,8 +59,10 @@ void HashTable::insert(char input){
 	//new node to hold data
 	HTNode* newnode = new HTNode();
 	
-	
 	newnode->key = input;
+	
+	//if there is already an key inside.
+	//if(find(input) == nullptr) return;
 	
 	//if the table index is empty
 	if(trav == nullptr) 
@@ -67,7 +72,7 @@ void HashTable::insert(char input){
 	}
 	
 /************************************/
-
+	
 	//if there is a collision
 	//start finding the end list and append there
 	//This simply just moves to the next one
@@ -125,21 +130,27 @@ void HashTable::erase(char input){
 HTNode* HashTable::find(char input){
 	
 	int hash = hash_code(input);
+	
 	HTNode* trav = table[hash];
+	
 	while(trav != nullptr){
+		
 		if(trav->key == input){
+			
 			//if it finds the value before it reaches the end
 			//early return the address
 			return trav;
+			
 		}else{
+			
 			//If it hasn't found the value, go to the next node
 			trav = trav->next;
+			
 		}
 	}
 	//if it had been exhausted, then trav is nullptr
 	
-	trav = nullptr;
-	return trav;
+	return nullptr;
 }
 std::string HashTable::Number_to_binaryString(int input){
 	
@@ -150,26 +161,33 @@ std::string HashTable::Number_to_binaryString(int input){
 	
 	for(int i = 0; i < bitsize; i++){
 		if((input & 1) == true){
-			outputstring.append("1");
+			outputstring += "1";
 		}else{
-			outputstring.append("0");
+			outputstring += "0";
 		}
 		
 		//(input & 1) ? outputstring.append(1) : outputstring.append(0);
+		input = input >> 1;
 	}
 	
-	return outpustring;
+	return outputstring;
 }
+
+
+//marked for fixing
+//memory leak
 void HashTable::print(){
 	for(int i = 0; i < maxsize; i++){
 		HTNode* trav = table[i];
 		while(trav != nullptr){
 			
-			std::cout << Number_to_binaryString(trav->value);
+			std::cout << trav->key << " " << Number_to_binaryString(trav->value) << " ";
 			
 			
-			std::cout << std::endl;
 			trav = trav->next;
 		}
+		
+		
+		std::cout << std::endl;
 	}
 }

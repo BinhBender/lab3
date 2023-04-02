@@ -8,7 +8,7 @@ struct HTNode{
 //Will not represent an actual number
 //Using bitwise operators as a makeshift array
 //why? cause it's more fun
-	int value;
+	int value = 0;
 
 	HTNode* next = nullptr;
 
@@ -22,9 +22,9 @@ private:
 	int maxsize;
 
 	//This table will be storing pointers of HTNodes
-	//
 	HTNode** table;
 	
+
 	//hash function that returns a number from 0 - maxsize
 	int hash_code(char);
 	
