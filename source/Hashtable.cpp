@@ -16,7 +16,20 @@ HashTable::HashTable(){
 
 
 HashTable::~HashTable(){
-	//deallocate table
+	//deletes every node in the table
+	//Goes through each index
+		//then goes through the chaining of each index
+	//then deletes the table itself
+	for(int i = 0; i < maxsize; i++){
+		HTNode* deleter = table[i];
+		while(deleter != nullptr){
+			HTNode* holder = deleter;
+			
+			delete holder;
+			deleter = deleter->next;
+		}
+	}
+	
 	delete table;
 }	
 
@@ -74,7 +87,7 @@ int* HashTable::operator[](char input){
 	
 	HTNode* temp = find(input);
 	
-	//if it doesn't exist, add the key
+	//if it doesn't exist, add the key 
 	//then find it again
 	if(temp == nullptr){
 		insert(input);
@@ -83,7 +96,7 @@ int* HashTable::operator[](char input){
 	
 	
 	
-	return temp->value;
+	return &(temp->value);
 }
 void HashTable::erase(char input){
 	int h = hash_code(input);
@@ -127,4 +140,36 @@ HTNode* HashTable::find(char input){
 	
 	trav = nullptr;
 	return trav;
+}
+std::string HashTable::Number_to_binaryString(int input){
+	
+	const int bitsize = sizeof(input) * 8;
+	
+	std::string outputstring = "";
+	
+	
+	for(int i = 0; i < bitsize; i++){
+		if((input & 1) == true){
+			outputstring.append("1");
+		}else{
+			outputstring.append("0");
+		}
+		
+		//(input & 1) ? outputstring.append(1) : outputstring.append(0);
+	}
+	
+	return outpustring;
+}
+void HashTable::print(){
+	for(int i = 0; i < maxsize; i++){
+		HTNode* trav = table[i];
+		while(trav != nullptr){
+			
+			std::cout << Number_to_binaryString(trav->value);
+			
+			
+			std::cout << std::endl;
+			trav = trav->next;
+		}
+	}
 }

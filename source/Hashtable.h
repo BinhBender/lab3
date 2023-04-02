@@ -1,34 +1,24 @@
-
+#include <iostream>
+#include <string>
 #pragma once
 class HashTable;
 //Hash table specific node, this will be used to chain colliding nodes.
-class HTNode{
-protected:
+struct HTNode{
+	char key = 0;
+//Will not represent an actual number
+//Using bitwise operators as a makeshift array
+//why? cause it's more fun
+	int value;
 
-	char key;
-//array
-	int* value;
+	HTNode* next = nullptr;
 
-	HTNode* next;
-
-public:
-	HTNode();
-	HTNode(int*);
-	HTNode(int*, char);
-	~HTNode();
-	
-	void SetNext(HTNode*);
-	int* GetValue() const;
-
-
-	friend class HashTable;
 };
 //This is a personal implementation of a hash table
 //It will specifically take in chars to hash, and 
 class HashTable{
 private:
 
-	
+	//This is the size of the table
 	int maxsize;
 
 	//This table will be storing pointers of HTNodes
@@ -39,9 +29,10 @@ private:
 	int hash_code(char);
 	
 	//A function so that chainning isn't too large
-	//maybe somewhere around 4 links per bucket
+	//maybe somewhere around 4 links per bucket 
 	void grow_if_neccessary();
 	
+	std::string Number_to_binaryString(int);
 public:
 	HashTable();
 	~HashTable();
@@ -54,5 +45,6 @@ public:
 	HTNode* find(char);
 	
 	int* operator[](char);
+	void print();
 	
 };
