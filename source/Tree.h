@@ -3,17 +3,10 @@
 
 //Node for the trees that only has two pointers
 class HuffManTree;
-class Node{
-
-private:
+struct Node{
 	std::string data;
 	Node* left;
 	Node* right;
-	
-public:
-	Node();
-	~Node();
-friend class HuffManTree;
 };
 
 //This is a huffman tree class template
@@ -24,7 +17,6 @@ friend class HuffManTree;
 //This class will return relevant data such as its 
 //height, size, max capacity size and if it has reached max size
 
-template<typename Ttravel, typename Tdata>
 class HuffManTree{
 public:
 	//returns the height of the class @
@@ -39,8 +31,11 @@ public:
 	//Boolean of if the current size is equal to the max size or not.
 	bool IsFull();
 	
-	//takes in an array
-	Tdata Data(Ttravel*);
+	//Returns a pointer to a leaf node
+	//input will be read from its binary code
+	//from the first digit to the last
+	//Length of travel will be from height
+	Node* GetLeaf(int);
 	
 	void append(Tdata);
 	
@@ -55,7 +50,9 @@ public:
 	
 	
 private:
-	
+	int height;
+	int size;
+	int leaf_nodes_filled_up;
 	Node* root;
 	
 	

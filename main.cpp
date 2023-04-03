@@ -6,8 +6,8 @@ int main(){
 	
 	ht.insert('a');
 	
-	//ht.find('a')->value = 0;
+	ht.find('a')->value = 0;
 	
-	//ht.print();
+	ht.print();
 	return 0;
 }

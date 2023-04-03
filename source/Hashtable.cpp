@@ -86,8 +86,7 @@ void HashTable::insert(char input){
 }
 
 //returns the address to the temp value
-
-	//this function is a bit slow because im using find() twice
+//this function is a bit slow because im using find() twice
 int* HashTable::operator[](char input){
 	
 	HTNode* temp = find(input);
@@ -98,7 +97,6 @@ int* HashTable::operator[](char input){
 		insert(input);
 		temp = find(input);
 	}
-	
 	
 	
 	return &(temp->value);
