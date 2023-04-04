@@ -27,24 +27,23 @@ bool TextParser::init(){
 	}
 	
 	std::string s;
+	
 	while(file){
 		
 		getline(file, s);
-		
+		std::string word;
 		//scanning through the line
 		for(int i = 0; i < s.size(); i++){
 			
+			
 			switch(s[i]){
-				case '1':
-					//go right
-				break;
-				case '0':
-				//go left
-				break;
 				case ' ':
-				
+				//end string 
+					
 				break;
 				default:
+					word += s[i];
+					
 					
 			}
 		}
