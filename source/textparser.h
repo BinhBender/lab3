@@ -17,7 +17,7 @@ private:
 	std::string decodedtext;
 	std::string encodedtext;
 	
-	HashTable ciphers;
+	HashTable ciphertable;
 	Queue<std::string> list_of_words;
 	BinaryTree ciphertree;
 
@@ -30,8 +30,11 @@ private:
 	
 public:
 
-	void setfile(std::string);
+	bool setfile(std::string);
 	bool init();
+
+	HashTable* GetCipherTable();
+	BinaryTree* GetCipherTree();
 	
 	TextParser();
 	~TextParser();

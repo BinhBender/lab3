@@ -17,7 +17,7 @@ public:
 
 template<typename T>
 void Queue<T>::clearlist(){
-	LInkedList<t>::clear();
+	LinkedList<T>::clear();
 }
 //removes the rear
 template<typename T>

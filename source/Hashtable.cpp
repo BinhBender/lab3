@@ -70,6 +70,12 @@ HTNode* HashTable::insert(char input){
 	}
 	
 /************************************/
+	//if it is the first one
+	if(trav->key == input) {
+		delete newnode;
+		return trav;
+	}
+	
 	
 	//if there is a collision
 	//start finding the end list and append there
@@ -90,6 +96,8 @@ HTNode* HashTable::insert(char input){
 
 //returns the address to the temp value
 //this function is a bit slow because im using find() twice
+
+//does not work yet
 std::string* HashTable::operator[](char input){
 	
 	HTNode* temp = insert(input);
@@ -98,14 +106,22 @@ std::string* HashTable::operator[](char input){
 	return &(temp->value);
 }
 void HashTable::erase(char input){
+	
 	int h = hash_code(input);
 	HTNode* trav = table[h];
 	
 	//checks for if the table at h is empty
 	if(trav == nullptr) return;
-	//checks if the first block in the chain is empty or not
+	
+	//checks if the first block in the chain is the input or not
 	if(trav->key == input) {
+		
+		//moves the pointer to the next node
 		table[h] = trav->next;
+		
+		//delete old node
+		delete trav;
+		return;
 	}
 	
 	

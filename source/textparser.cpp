@@ -1,8 +1,8 @@
 #include "textparser.h"
 TextParser::TextParser(){
 	file_to_open = "";
-	cipherinit();
-	
+	ciphertableinit();
+	ciphertreeinit();
 }
 
 TextParser::~TextParser(){
@@ -22,6 +22,9 @@ bool TextParser::setfile(std::string input){
 	}
 	
 	file.open(file_to_open);
+	
+	
+	return true;
 }
 bool TextParser::isbinary(char input){
 	if(input == '0' || input == '1'){
@@ -46,8 +49,8 @@ void TextParser::ciphertableinit(){
 		cipherfile >> character;
 		cipherfile >> path;
 		
-		ciphers.insert(character);
-		ciphers.find(character)->value = path;
+		ciphertable.insert(character.front());
+		ciphertable.find(character.front())->value = path;
 
 	}
 	
@@ -56,7 +59,6 @@ void TextParser::ciphertableinit(){
 void TextParser::ciphertreeinit(){
 	cipherfile.open("cipher.txt");
 	if(!cipherfile.is_open()) return;
-	unsigned int toggle = 1;
 	//we know that the text in the cipher file alternates between
 	//data and code so we could just flip between there.
 	
@@ -69,12 +71,16 @@ void TextParser::ciphertreeinit(){
 		cipherfile >> path;
 		
 		
-		ciphers.append(*character.begin(), path);
+		ciphertree.append(character.front(), path);
 
 	}
 }
-
-
+HashTable* TextParser::GetCipherTable(){
+		return &ciphertable;
+}
+BinaryTree* TextParser::GetCipherTree(){
+		return &ciphertree;
+}
 bool TextParser::encrypting(std::string s){
 	std::string code;
 	for(unsigned int i = 0; i < s.size(); i++){
@@ -82,9 +88,9 @@ bool TextParser::encrypting(std::string s){
 			code += " ";
 		}
 		else {
-			if(ciphers.find(s[i]) == nullptr) return false;
+			if(ciphertable.find(s[i]) == nullptr) return false;
 			
-			code = ciphers.find(s[i])->value + " ";
+			code = ciphertable.find(s[i])->value + " ";
 		}
 	}
 	encodedtext = code;

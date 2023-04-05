@@ -6,6 +6,9 @@
 #include "source/Tree.h"
 #include "source/textparser.h"
 
+bool yesnoloop();
+void choosefile();
+
 
 int main(){
 	
@@ -68,6 +71,16 @@ void choosefile(){
 	
 	tp.init();
 	
+	
+	
+}
+
+void stringinput(){
+	std::string phrase;
+	
+	std::cout << "Enter the phrase you want to encrypt/decrypt,\nmake sure you use the cipher properly, wrong \ncodes will eject the function\n";
+	
+	std::cin >> phrase;
 	
 	
 }
