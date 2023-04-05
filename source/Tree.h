@@ -1,40 +1,39 @@
 #include <string>
-#include <cmath>
+#include <cctype>
+#include "queue.h"
 #pragma once
 
 //Node for the trees that only has two pointers
-class HuffManTree;
-struct Node{
+struct BTNode{
 	char data = 0;
-	Node* left = nullptr;
-	Node* right = nullptr;
+	BTNode* left = nullptr;
+	BTNode* right = nullptr;
 };
 
-class HuffManTree{
+class BinaryTree{
 public:
 
-	HuffManTree();
+	BinaryTree();
 	//Makes a tree with a node
-	HuffManTree(Node*);
+	BinaryTree(BTNode*);
 	
 	//creates a tree given the height
-	HuffManTree(int);
+	//BinaryTree(int);
 
-	~HuffManTree();
+	~BinaryTree();
 
 	//returns the height of the class @
 	int Height();
 	
-	//Boolean of if the current size is equal to the max size or not.
-	bool IsFull();
-	
+
+	int GetSize();
 	//Returns a pointer to a leaf node
 	//input will be read from its binary code
 	//from the first digit to the last
 	//Length of travel will be the height
-	Node* GetLeaf(int);
+	BTNode* Traverse(std::string);
 	
-	void append(char);
+	void append(char, std::string);
 	
 
 	
@@ -43,10 +42,10 @@ private:
 
 	int height;
 	int size;
-	int leaf_nodes_filled_up;
-	Node* root;
+	//int leaf_nodes_filled_up;
+	BTNode* root;
 	
 	//takes in a height and will make tree
-	void deleteTree(Node*);
-	Node* generatetree(int);
+	void deleteTree(BTNode*);
+	BTNode* generatetree(int);
 };

@@ -5,10 +5,8 @@ class HashTable;
 //Hash table specific node, this will be used to chain colliding nodes.
 struct HTNode{
 	char key = 0;
-//Will not represent an actual number
-//Using bitwise operators as a makeshift array
-//why? cause it's more fun
-	int value = 0;
+
+	std::string value = "";
 
 	HTNode* next = nullptr;
 
@@ -32,19 +30,18 @@ private:
 	//maybe somewhere around 4 links per bucket 
 	void grow_if_neccessary();
 	
-	std::string Number_to_binaryString(int);
 public:
 	HashTable();
 	~HashTable();
 	
 
 	
-	void insert(char);
+	HTNode* insert(char);
 	void erase(char);
 //returns a pointer to the node containing the key
 	HTNode* find(char);
 	
-	int* operator[](char);
+	std::string* operator[](char);
 	void print();
 	
 };

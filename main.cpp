@@ -1,13 +1,11 @@
 #include <iostream>
 #include "source/Hashtable.h"
+#include "source/Tree.h"
 int main(){
 	
-	HashTable ht;
 	
-	ht.insert('a');
-	
-	ht.find('a')->value = 0;
-	
-	ht.print();
 	return 0;
 }
+
+
+

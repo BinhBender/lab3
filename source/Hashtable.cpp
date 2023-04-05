@@ -37,6 +37,7 @@ HashTable::~HashTable(){
 
 int HashTable::hash_code(char input){
 	
+	//uses the ascii table
 	int hash = int(input);
 
 	//compression
@@ -49,7 +50,7 @@ int HashTable::hash_code(char input){
 	return hash;
 }
 
-void HashTable::insert(char input){
+HTNode* HashTable::insert(char input){
 	//find index based on input
 	int h = hash_code(input);
 	
@@ -57,46 +58,41 @@ void HashTable::insert(char input){
 	HTNode* trav = table[h];
 	
 	//new node to hold data
-	HTNode* newnode = new HTNode();
+	HTNode* newnode = new HTNode;
 	
 	newnode->key = input;
-	
-	//if there is already an key inside.
-	//if(find(input) == nullptr) return;
 	
 	//if the table index is empty
 	if(trav == nullptr) 
 	{
 		table[h] = newnode;
-		return;
+		return newnode;
 	}
 	
 /************************************/
 	
 	//if there is a collision
 	//start finding the end list and append there
-	//This simply just moves to the next one
 	while(trav->next != nullptr){
+		
+		//if it already exists, return early
+		if(trav->key == input) return trav;
+		
 		trav = trav->next;
 	}
-
+	
+	//loop ends when next no longer points to a node
+	
 	trav->next = newnode;
 	
-	
+	return newnode;
 }
 
 //returns the address to the temp value
 //this function is a bit slow because im using find() twice
-int* HashTable::operator[](char input){
+std::string* HashTable::operator[](char input){
 	
-	HTNode* temp = find(input);
-	
-	//if it doesn't exist, add the key 
-	//then find it again
-	if(temp == nullptr){
-		insert(input);
-		temp = find(input);
-	}
+	HTNode* temp = insert(input);
 	
 	
 	return &(temp->value);
@@ -150,26 +146,7 @@ HTNode* HashTable::find(char input){
 	
 	return nullptr;
 }
-std::string HashTable::Number_to_binaryString(int input){
-	
-	const int bitsize = sizeof(input) * 8;
-	
-	std::string outputstring = "";
-	
-	
-	for(int i = 0; i < bitsize; i++){
-		if((input & 1) == true){
-			outputstring += "1";
-		}else{
-			outputstring += "0";
-		}
-		
-		//(input & 1) ? outputstring.append(1) : outputstring.append(0);
-		input = input >> 1;
-	}
-	
-	return outputstring;
-}
+
 
 
 //marked for fixing
@@ -179,7 +156,7 @@ void HashTable::print(){
 		HTNode* trav = table[i];
 		while(trav != nullptr){
 			
-			std::cout << trav->key << " " << Number_to_binaryString(trav->value) << " ";
+			std::cout << trav->key << " " << trav->value << " ";
 			
 			
 			trav = trav->next;

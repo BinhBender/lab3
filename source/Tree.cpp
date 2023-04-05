@@ -1,21 +1,20 @@
 #include "Tree.h"
 
 //empty constructor
-HuffManTree::HuffManTree(){
-	root = nullptr;
+BinaryTree::BinaryTree(){
+	root = new BTNode;
 	height = 0;
 	size = 0;
 }
 	
 //Makes a tree with a node
-HuffManTree::HuffManTree(Node* input){
+BinaryTree::BinaryTree(BTNode* input){
 
 	
 	root = input;
-	leaf_nodes_filled_up = 0;
 	
 	//find the height of the subtree
-	Node* trav = root;
+	BTNode* trav = root;
 	int newheight = 0;
 	
 	
@@ -29,23 +28,24 @@ HuffManTree::HuffManTree(Node* input){
 	
 	height = newheight;
 }
-
+/*
 //creates a tree with all the leafs but with no data.
-HuffManTree::HuffManTree(int initheight){
+BinaryTree::BinaryTree(int initheight){
 	root = nullptr;
 	size = 0;
 	height = initheight;
-	leaf_nodes_filled_up = 0;
 	
 	root = generatetree(height);
-}
+}*/
 
-HuffManTree::~HuffManTree(){
+BinaryTree::~BinaryTree(){
 	deleteTree(root);
 }
 
-void HuffManTree::deleteTree(Node* input){
+//
+void BinaryTree::deleteTree(BTNode* input){
 	
+	//if the pointer is empty, do nothing
 	if(input == nullptr) return;
 	
 	
@@ -57,13 +57,13 @@ void HuffManTree::deleteTree(Node* input){
 }
 
 
-Node* HuffManTree::generatetree(int Height){
+BTNode* BinaryTree::generatetree(int Height){
 	
-	//Base case, a 0 node tree
+	//Base case, a 0 node tree 
 	if(Height == 0) return nullptr;
 	
 
-	Node* newnode = new Node();
+	BTNode* newnode = new BTNode;
 	
 	newnode->left = generatetree(Height -1);
 	newnode->right = generatetree(Height - 1);
@@ -72,69 +72,79 @@ Node* HuffManTree::generatetree(int Height){
 }
 
 
-/*
- * This traverses via the binary code in an integer
- * ie 010101001
- * 0 will be the "left" and 1 will be "right"
- * given the binary, we will check the first bit
- * and bitshift right until we get reach the height.
- * */
-Node* HuffManTree::GetLeaf(int input){
-	Node* trav = root;
-	for(int i = 0; i < height; i++){
-		
-		if((input & 1) == true){
-			trav = trav->right;
-		}else{
+
+BTNode* BinaryTree::Traverse(std::string path){
+	BTNode* trav = root;
+	
+	if(trav == nullptr) return nullptr;
+	
+	for(unsigned int i = 0; i < path.size(); i++){
+		BTNode* dummy = trav;
+		if(path[i] == '0'){
+			//move left
 			trav = trav->left;
+			
+			//if there is an empty node to the left, make new node
+			if(trav == nullptr){
+				trav = new BTNode;
+				dummy->left = trav;
+			}
+			
+		}else if(path[i] == '1'){
+			//move right
+			trav = trav->right;
+			
+			//If the node trav went to is empty, create a new node
+			if(trav == nullptr){
+				trav = new BTNode;
+				dummy->right = trav;
+			}
 		}
+		
 	}
 	
 	return trav;
 }
+
+//inspired from zybook
+int findheight(BTNode* n) {
+	if(n == nullptr) return 0;
+	
+	else { 
+		int left = findheight(n->left);
+		int right = findheight(n->right);
+		
+		return 1 + (left > right ? left : right);
+	}
+}
 //returns the height of the class @
-int HuffManTree::Height(){
-	return height;
+int BinaryTree::Height(){
+	return findheight(root);
 }
 
 
 //Traverses through the tree
-int size_finder(Node* n){
+int size_finder(BTNode* n){
+	
 	if(n == nullptr) return 0;
+	
 	return size_finder(n->left) + size_finder(n->right) + 1;
 }
+int BinaryTree::GetSize(){
 	
-//Boolean of if the current size is equal to the max size or not.
-bool HuffManTree::IsFull(){
-	
-	//In a binary tree where we only care about its leaf nodes
-	//The # of leafs are counted as 2^n with n = height - 1 
- 	return pow(2, height-1) > leaf_nodes_filled_up;
+ 	return size_finder(root);
 
 }	
 	
 //finds the first open spot
-void HuffManTree::append(char c){
-	
-	//These trees are meant to have static height.
-	if(IsFull()) return;
-	
-	Node* trav = root;
-	int path = leaf_nodes_filled_up;
-	for(int i = 0; i < height - 1; i++){
-		if( (path & 0) == 0) // go left
-		{
-			trav = trav->left;
-		}
-		else if( (path & 1)  == 1)// go right
-		{
-			trav = trav->right;
-		}
-		
-		path = path >> 1;
+void BinaryTree::append(char value,std::string path){
+	for(unsigned int i = 0; i < path.size(); i++){
+		if(isalpha(path[i])) return;
 	}
-	leaf_nodes_filled_up++;
-	trav->data = c;
 	
+	size++;
+	BTNode* foundnode = Traverse(path);
+
+	foundnode->data = value;
 }
 	
