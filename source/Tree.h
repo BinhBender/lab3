@@ -45,6 +45,8 @@ private:
 	//int leaf_nodes_filled_up;
 	BTNode* root;
 	
+
+
 	//takes in a height and will make tree
 	void deleteTree(BTNode*);
 	BTNode* generatetree(int);

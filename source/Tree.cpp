@@ -76,8 +76,6 @@ BTNode* BinaryTree::generatetree(int Height){
 BTNode* BinaryTree::Traverse(std::string path){
 	BTNode* trav = root;
 	
-	if(trav == nullptr) return nullptr;
-	
 	for(unsigned int i = 0; i < path.size(); i++){
 		BTNode* dummy = trav;
 		if(path[i] == '0'){

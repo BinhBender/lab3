@@ -10,15 +10,10 @@ class Queue : public LinkedList<T>{
 public:
 	void pop();
 	void push(T);
-	void clearlist();
 	T front();
 };
 
 
-template<typename T>
-void Queue<T>::clearlist(){
-	LinkedList<T>::clear();
-}
 //removes the rear
 template<typename T>
 void Queue<T>::pop(){

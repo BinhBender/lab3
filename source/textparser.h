@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include <iostream>
 #include "Tree.h"
 #include "Hashtable.h"
 #pragma once
@@ -14,6 +15,7 @@ private:
 	std::ifstream cipherfile;
 	
 
+
 	std::string decodedtext;
 	std::string encodedtext;
 	
@@ -25,13 +27,17 @@ private:
 
 	void ciphertableinit();
 	void ciphertreeinit();
-	bool encrypting(std::string);
-	bool decrypting(std::string);
+
 	
 public:
 
 	bool setfile(std::string);
 	bool init();
+
+	bool encryption(std::string);
+	bool decryption(std::string);
+
+	std::string GetResult();
 
 	HashTable* GetCipherTable();
 	BinaryTree* GetCipherTree();

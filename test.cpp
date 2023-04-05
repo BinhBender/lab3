@@ -1,21 +1,22 @@
 #include "source/Hashtable.h"
 //#include "source/textparser.h"
 #include <iostream>
+#include <fstream>
 
 int main(){
 
 
-	HashTable ht;
+	std::ifstream file("cipher.txt");
 	
-	*ht['h'] = "10";
-	
-	ht.insert('a');
-	ht.find('a')->value = "balls";
-	std::cout << *(ht['h']) << std::endl;
-	
-	std::cout << ht.find('a')->value;
-	
-	std::cout << ht.insert('a');
+	while(file){
+		std::string a;
+		std::string b;
+		
+		file >> a;
+		file >> b;
+		std::cout << a << " " << b << std::endl;
+		
+	}
 	
 	
 	return 0;

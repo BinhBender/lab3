@@ -6,9 +6,9 @@
 #include "source/Tree.h"
 #include "source/textparser.h"
 
-bool yesnoloop();
+bool yesnoloop(char positive, char negative);
 void choosefile();
-
+void stringinput();
 
 int main(){
 	
@@ -19,20 +19,26 @@ int main(){
 	
 	while(keeprunning){
 		
-		if(!yesnoloop()) break;
+		if(!yesnoloop('y','n')) break;
 		
 		char choice;
 		
-		std::cout << "1 - Choose a file to encode/decode\n2 - Type a message to encode/decode\n";
-		std::cin>>choice
-		switch(choice){
-			
-			case 1:
+		do{
+			std::cout << "1 - Choose a file to encode/decode\n2 - Type a message to encode/decode\n";
+			std::cin>>choice;
+			switch(choice){
 				
-			break;
-			case 2:
-			
-			break;
+				case 1:
+					choosefile();
+				break;
+				case 2:
+					stringinput();
+				break;
+				default:
+				
+				break;
+			}
+		}while(choice != '1' && choice != '2');
 	}
 	
 	
@@ -43,15 +49,15 @@ int main(){
 }
 
 
-bool yesnoloop(){
+bool yesnoloop(char positive, char negative){
 	
 	char output;
 	do{
 		
 		std::cin >> output;
-	}while(output != 'y' || output != 'n')
+	}while(output != positive || output != negative);
 	
-	if(output == 'y') return true;
+	if(output == positive) return true;
 	else return false;
 	
 }
@@ -71,16 +77,20 @@ void choosefile(){
 	
 	tp.init();
 	
+	std::cout << tp.GetResult();
+	
 	
 	
 }
 
 void stringinput(){
 	std::string phrase;
-	
+	TextParser tp;
 	std::cout << "Enter the phrase you want to encrypt/decrypt,\nmake sure you use the cipher properly, wrong \ncodes will eject the function\n";
 	
 	std::cin >> phrase;
 	
-	
+	if(tp.encryption(phrase)){
+		
+	}
 }

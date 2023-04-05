@@ -62,7 +62,7 @@ void TextParser::ciphertreeinit(){
 	//we know that the text in the cipher file alternates between
 	//data and code so we could just flip between there.
 	
-	while(cipherfile){
+	while(!cipherfile.eof()){
 		std::string path;
 		std::string character;
 		
@@ -81,15 +81,16 @@ HashTable* TextParser::GetCipherTable(){
 BinaryTree* TextParser::GetCipherTree(){
 		return &ciphertree;
 }
-bool TextParser::encrypting(std::string s){
+bool TextParser::encryption(std::string s){
 	std::string code;
+	
+	//iterate through the input
 	for(unsigned int i = 0; i < s.size(); i++){
 		if(s[i] == ' ') {
 			code += " ";
 		}
 		else {
-			if(ciphertable.find(s[i]) == nullptr) return false;
-			
+
 			code = ciphertable.find(s[i])->value + " ";
 		}
 	}
@@ -99,24 +100,37 @@ bool TextParser::encrypting(std::string s){
 }
 
 //Scans through each character, if it is has a non-binary character, then it exits
-bool TextParser::decrypting(std::string s){
+bool TextParser::decryption(std::string s){
 	std::string word;
 	for(unsigned int i = 0; i < s.size(); i++){
 		
-		if(isbinary(s[i])) return false;
 		if(s[i] == ' '){
 			
 			if(s[i + 1]== ' ')
 			{
 				list_of_words.push(word);
+				i++;
 			}
+			
 			//Resets word for the next code.
 			word.erase(word.begin(), word.end());
-		}else{
+		}else if(isbinary(s[i])){
 			word += s[i];
+		}else{
+			//This means that there is an alphabet char in the string
+			
+			list_of_words.clear();
+			
+			return false;
 		}
 		
 	}
+	
+	while(list_of_words.GetSize() != 0){
+		decodedtext += list_of_words.front();
+		list_of_words.pop();
+	}
+	
 	
 	return true;
 }
@@ -124,12 +138,27 @@ bool TextParser::init(){
 	if(!file.is_open()){
 		return false;
 	}
-	
+	bool encrypting = false;
 	std::string s;
 	while(file){
 		getline(file, s);
 		std::string word;
-
+		
+		if(!encrypting){
+			
+			//if the encryption fines
+			if(!decryption(s)){
+				encrypting = true;
+					//reopen the file to restart the process
+				file.close();
+				file.open(file_to_open);
+			}
+			
+		}
+		else{
+			encryption(s);
+		}
+		
 	}
 	
 	
