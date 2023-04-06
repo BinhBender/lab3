@@ -165,8 +165,7 @@ HTNode* HashTable::find(char input){
 
 
 
-//marked for fixing
-//memory leak
+//marked for fixinG
 void HashTable::print(){
 	for(int i = 0; i < maxsize; i++){
 		HTNode* trav = table[i];

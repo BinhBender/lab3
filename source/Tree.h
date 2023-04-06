@@ -1,6 +1,7 @@
 #include <string>
 #include <cctype>
 #include "queue.h"
+#include <iostream>
 #pragma once
 
 //Node for the trees that only has two pointers
@@ -10,6 +11,11 @@ struct BTNode{
 	BTNode* right = nullptr;
 };
 
+/*
+This tree uses strings of 1 & 0s to determine its path
+The characters of the path is read of left to right
+
+*/
 class BinaryTree{
 public:
 
@@ -34,9 +40,9 @@ public:
 	BTNode* Traverse(std::string);
 	
 	void append(char, std::string);
-	
-
-	
+	int max_size_of_height();
+	void print();
+	std::string find_next();
 	
 private:
 
@@ -45,8 +51,8 @@ private:
 	//int leaf_nodes_filled_up;
 	BTNode* root;
 	
-
-
+	void print(BTNode* parent);
+	std::string findnextposition(BTNode* parent);
 	//takes in a height and will make tree
 	void deleteTree(BTNode*);
 	BTNode* generatetree(int);

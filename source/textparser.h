@@ -16,14 +16,12 @@ private:
 	
 
 
-	std::string decodedtext;
-	std::string encodedtext;
+	std::string resultingtext;
 	
 	HashTable ciphertable;
-	Queue<std::string> list_of_words;
+	Queue<std::string> list_of_paths;
 	BinaryTree ciphertree;
 
-	bool isbinary(char);
 
 	void ciphertableinit();
 	void ciphertreeinit();
@@ -34,6 +32,7 @@ public:
 	bool setfile(std::string);
 	bool init();
 
+	bool isbinary(char);
 	bool encryption(std::string);
 	bool decryption(std::string);
 

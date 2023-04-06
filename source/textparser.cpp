@@ -3,6 +3,7 @@ TextParser::TextParser(){
 	file_to_open = "";
 	ciphertableinit();
 	ciphertreeinit();
+
 }
 
 TextParser::~TextParser(){
@@ -12,7 +13,7 @@ TextParser::~TextParser(){
 
 bool TextParser::setfile(std::string input){
 	file_to_open = input;
-	
+	/*
 	//Check for if there is no file
 	if(!file.is_open()) return false;
 	
@@ -20,7 +21,7 @@ bool TextParser::setfile(std::string input){
 	if(file.is_open()){
 		file.close();
 	}
-	
+	*/
 	file.open(file_to_open);
 	
 	
@@ -35,6 +36,9 @@ bool TextParser::isbinary(char input){
 
 
 void TextParser::ciphertableinit(){
+	if(cipherfile.is_open()){
+		cipherfile.close();
+	}
 	cipherfile.open("cipher.txt");
 	if(!cipherfile.is_open()) return;
 	
@@ -44,19 +48,28 @@ void TextParser::ciphertableinit(){
 	
 	std::string holder;
 	while(cipherfile){
+		
 		std::string character;
 		std::string path;
 		cipherfile >> character;
 		cipherfile >> path;
 		
+		
 		ciphertable.insert(character.front());
 		ciphertable.find(character.front())->value = path;
+		
+		
+		//HTNode* a = ciphertable.find(character.front());
+		//std::cout << a->key << " " << a->value << std::endl;
 
 	}
 	
 }
 
 void TextParser::ciphertreeinit(){
+	if(cipherfile.is_open()){
+		cipherfile.close();
+	}
 	cipherfile.open("cipher.txt");
 	if(!cipherfile.is_open()) return;
 	//we know that the text in the cipher file alternates between
@@ -71,6 +84,7 @@ void TextParser::ciphertreeinit(){
 		cipherfile >> path;
 		
 		
+		//std::cout << character << " " << path << std::endl;
 		ciphertree.append(character.front(), path);
 
 	}
@@ -87,48 +101,70 @@ bool TextParser::encryption(std::string s){
 	//iterate through the input
 	for(unsigned int i = 0; i < s.size(); i++){
 		if(s[i] == ' ') {
-			code += " ";
+			code += ' ';
 		}
 		else {
 
-			code = ciphertable.find(s[i])->value + " ";
+			code += ciphertable.find(s[i])->value + " ";
 		}
 	}
-	encodedtext = code;
+	resultingtext = code;
 	
 	return true;
 }
-
+std::string TextParser::GetResult(){
+		return resultingtext;
+}
 //Scans through each character, if it is has a non-binary character, then it exits
 bool TextParser::decryption(std::string s){
-	std::string word;
+	std::string path;
+	
+	//loop through the string
 	for(unsigned int i = 0; i < s.size(); i++){
 		
+		//this condition checks for if the end of the char
 		if(s[i] == ' '){
 			
+			//Resets word for the next code.
+			list_of_paths.push(path);
+			
+			//This means that the word is finished
 			if(s[i + 1]== ' ')
 			{
-				list_of_words.push(word);
+				list_of_paths.push(" ");
 				i++;
 			}
 			
-			//Resets word for the next code.
-			word.erase(word.begin(), word.end());
-		}else if(isbinary(s[i])){
-			word += s[i];
-		}else{
-			//This means that there is an alphabet char in the string
 			
-			list_of_words.clear();
-			
-			return false;
+			path.erase(path.begin(), path.end());
+		}else if(s[i] == '\n')
+		{
+			list_of_paths.push("\n");
 		}
+		else{
+			path += s[i];
+		}
+		
 		
 	}
 	
-	while(list_of_words.GetSize() != 0){
-		decodedtext += list_of_words.front();
-		list_of_words.pop();
+	//Iterate through the queue of "paths"
+	while(list_of_paths.GetSize() != 0){
+		std::string path = list_of_paths.front();
+		
+		//if the paths have these chars, then it adds it to the 
+		//output string which is resultingtext
+		if(path == " " || path == "\n"){
+			resultingtext.append(path);
+		}else{
+			
+			//Get the data from the tree
+			BTNode* walker = ciphertree.Traverse(path);
+			//std::cout << walker->data << " " ;
+			resultingtext += walker->data;
+		}
+		
+		list_of_paths.pop();
 	}
 	
 	
@@ -136,32 +172,39 @@ bool TextParser::decryption(std::string s){
 }
 bool TextParser::init(){
 	if(!file.is_open()){
+		std::cout <<"File Not open\n";
 		return false;
 	}
-	bool encrypting = false;
+	//bool encrypting = false;
 	std::string s;
 	while(file){
 		getline(file, s);
 		std::string word;
 		
-		if(!encrypting){
-			
-			//if the encryption fines
-			if(!decryption(s)){
+		
+		bool encrypting = false;
+		std::cout << "Starting new line:\nChecking for alphabetical letters...\n";
+		
+		//Detects whether or not we do encryption
+		for(char c : s){
+			if(!isbinary(c) || c == ' '){
 				encrypting = true;
-					//reopen the file to restart the process
-				file.close();
-				file.open(file_to_open);
+				break;
 			}
-			
-		}
-		else{
-			encryption(s);
 		}
 		
+		if(encrypting){
+			std::cout << "Founded lexiconic letters, beginning encryption\n";
+			encryption(s);
+		}
+		else{
+			std::cout << "No letters founded, beginning decryption\n";
+			
+			decryption(s);
+		}
 	}
 	
-	
+	file.close();
 	return true;
 }
 

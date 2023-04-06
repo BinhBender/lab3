@@ -56,7 +56,7 @@ void BinaryTree::deleteTree(BTNode* input){
 	delete input;
 }
 
-
+//Unused
 BTNode* BinaryTree::generatetree(int Height){
 	
 	//Base case, a 0 node tree 
@@ -137,6 +137,7 @@ int BinaryTree::GetSize(){
 //finds the first open spot
 void BinaryTree::append(char value,std::string path){
 	for(unsigned int i = 0; i < path.size(); i++){
+		//std::cout << "Checking alpha" << std::endl;
 		if(isalpha(path[i])) return;
 	}
 	
@@ -145,4 +146,52 @@ void BinaryTree::append(char value,std::string path){
 
 	foundnode->data = value;
 }
+
+void BinaryTree::print(BTNode* parent){
+	if(parent == nullptr) return;
 	
+	print(parent->left);
+	
+	std::cout << parent->data << " ";
+	
+	print(parent->right);
+	
+}
+//taken from zybook
+void BinaryTree::print(){
+	print(root);
+	std::cout << std::endl;
+}	
+
+int twonplus1(int i){
+	if(i == 1) return 1;
+	
+	return (2 * twonplus1(i-1)) + 1;
+	
+}
+
+//Finds the next SHORTEST path in the tree with a left path bias
+std::string BinaryTree::findnextposition(BTNode* parent){
+	if(parent == nullptr) return "";
+	
+	std::string left = "0" + findnextposition(parent->left);
+	std::string right="1" + findnextposition(parent->right) ;
+	
+	
+	//I am the best
+	if(left.size() > right.size()){
+		return right;
+	}
+	return left;
+	
+}
+
+std::string BinaryTree::find_next(){
+	return findnextposition(root);
+}
+int BinaryTree::max_size_of_height(){
+	int max = twonplus1(height);
+	
+	return max;
+	
+}
