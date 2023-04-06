@@ -79,10 +79,10 @@ void choosefile(){
 	
 	TextParser tp;
 	
-	std::cout << "\nEnter file name that exists in the samplefiles folder \"____.txt\"\n";
+	std::cout << "\nEnter file name that exists in the samplefiles folder \"____\"\n";
 	std::cin >> filename;
 	
-	if(!tp.setfile("samplefiles/" + filename)){
+	if(!tp.setfile("samplefiles/" + filename + ".txt")){
 		std::cout<< "Error, file not found, exiting function\n";
 		return;
 	}
@@ -93,7 +93,7 @@ void choosefile(){
 	
 	
 	std::string output = tp.GetResult();
-	
+	std::string pretext = tp.GetPreText();
 	std::cout << "This is your processed message\n" ;
 	std::cout << linebreaker << output << linebreaker;
 	
@@ -102,7 +102,8 @@ void choosefile(){
 	if(yesnoloop('y', 'n')){
 		std::ofstream newfile = Make_New_File();
 		
-		newfile << output;
+		newfile << pretext;
+		newfile << "\n\n\n" + output;
 	}
 	
 	
@@ -111,11 +112,11 @@ void choosefile(){
 
 std::ofstream Make_New_File(){
 	std::ofstream newfile;
-	std::cout << "Enter in the name of your new file \"____.txt\"\n";
+	std::cout << "Enter in the name of your new file \"____\"\n";
 	std::string newfilename;
 	std::cin >> newfilename;
 	
-	newfile.open("samplefiles/" + newfilename, std::ofstream::out | std::ofstream::trunc);
+	newfile.open("samplefiles/" + newfilename + ".txt", std::ofstream::out | std::ofstream::trunc);
 	
 	
 	return newfile;
@@ -161,6 +162,7 @@ void userstringinput(){
 	}
 	//Cosmetic
 	std::string output = tp.GetResult();
+	std::string pretext = tp.GetPreText();
 	
 		std::cout << "This is your processed message\n" ;
 	std::cout << linebreaker << output << linebreaker;
@@ -170,6 +172,7 @@ void userstringinput(){
 	if(yesnoloop('y', 'n')){
 		std::ofstream newfile = Make_New_File();
 		
-		newfile << output;
+		newfile << pretext;
+		newfile << "\n\n\n" + output;
 	}
 }

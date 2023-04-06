@@ -102,22 +102,14 @@ bool TextParser::encryption(std::string s){
 	std::string code;
 	
 	//iterate through the input
-	for(char c : s){
-		if(c == ' ') {
+	for(unsigned int i = 0; i < s.size(); i++){
+		if(s[i] == ' ') {
 			code += ' ';
 		}
-		else {
-			if(ciphertable.find(c) == nullptr){
-				
-				std::cout << "created" << c;
-				std::string newpath = ciphertree.find_next();
-				//creates a new node where a new path was found
-				ciphertree.append(c, newpath);
-				
-				ciphertable.insert(c)->value = newpath;
+		else{
 			
-			}
-			code += ciphertable.find(c)->value + " ";
+			
+			code += ciphertable.find(s[i])->value + " ";
 		}
 	}
 	resultingtext += code;
@@ -169,7 +161,7 @@ bool TextParser::decryption(std::string s){
 			
 			//Get the data from the tree
 			BTNode* walker = ciphertree.Traverse(path);
-			std::cout << path << " " << walker->data << " " ;
+			//std::cout << path << " " << walker->data << " " ;
 			resultingtext += walker->data;
 		}
 		
@@ -185,14 +177,14 @@ std::string TextParser::GetResult(){
 		return resultingtext;
 }
 bool TextParser::init(){
-	resultingtext = "";
+	resultingtext = pretext = "";
 	if(!file.is_open()){
 		std::cout <<"File Not open\n";
 		return false;
 	}
 	//bool encrypting = false;
 	
-		std::string s;
+	std::string s;
 	while(file){
 		
 		std::getline(file, s);
@@ -202,14 +194,26 @@ bool TextParser::init(){
 		std::cout << "Starting new line:\nChecking for alphabetical letters...\n";
 		
 //Prescan
-		for(char c : s){
+		for(int i = 0; i < s.size(); i++){
 			
 		//Detects whether or not we do encryption
-			if(!isbinary(c) && c != ' '){
+			if(!isbinary(s[i]) && s[i] != ' '){
 				encrypting = true;
-				break;
+				
+				
 			}
 
+			if(ciphertable.find(s[i]) == nullptr && s[i] != ' ' && !isbinary(s[i])){
+					
+				std::cout << "created" << s[i];
+				std::string newpath = ciphertree.find_next();
+					//creates a new node where a new path was found
+					
+				ciphertree.append(s[i], newpath);
+					
+				ciphertable.insert(s[i])->value = newpath;
+			
+			}
 
 
 		}
@@ -220,7 +224,7 @@ bool TextParser::init(){
 		}
 		else{
 			std::cout << "No letters founded, beginning decryption\n";
-			
+			pretext += s;
 			decryption(s);
 		}
 	}
@@ -229,3 +233,6 @@ bool TextParser::init(){
 	return true;
 }
 
+std::string GetPreText(){
+	return pretext;
+}
