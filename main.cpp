@@ -29,7 +29,7 @@ int main(){
 		char choice;
 		
 		do{
-			std::cout << "1 - Choose a file to encode/decode\n2 - Type a message to encode/decode\n";
+			std::cout << "\n1 - Choose a file to encode/decode\n\n2 - Type a message in the console to encode/decode\n";
 			std::cin >> choice;
 			switch(choice){
 				
@@ -44,6 +44,8 @@ int main(){
 				break;
 			}
 		}while(choice != '1' && choice != '2');
+		
+		std::cout << "Do you want to continue? (y/n): ";
 	}
 	
 	
@@ -68,8 +70,8 @@ bool yesnoloop(char positive, char negative){
 }
 bool runagain(){
 	
-	std::cout << "Would you like to save it? (y/n)\n";
-	return yesnoloop('y', 'n')
+	std::cout << "Would you like to run it? (y/n)\n";
+	return yesnoloop('y', 'n');
 	
 }
 void choosefile(){
@@ -77,7 +79,7 @@ void choosefile(){
 	
 	TextParser tp;
 	
-	std::cout << "Enter file name that exists in the samplefiles folder \"____.txt\"";
+	std::cout << "\nEnter file name that exists in the samplefiles folder \"____.txt\"\n";
 	std::cin >> filename;
 	
 	if(!tp.setfile("samplefiles/" + filename)){
@@ -87,7 +89,7 @@ void choosefile(){
 	std::cout << linebreaker;
 	std::cout << "Starting Process\n";
 	tp.init();
-	std::cout << "Process Ended\n" << linebreaker << linebreaker;
+	std::cout << "Process Ended\n" << linebreaker;
 	
 	
 	std::string output = tp.GetResult();
@@ -96,7 +98,7 @@ void choosefile(){
 	std::cout << linebreaker << output << linebreaker;
 	
 
-	std::cout << "Would you like to save it?\n";
+	std::cout << "Would you like to save it? (y/n)\n";
 	if(yesnoloop('y', 'n')){
 		std::ofstream newfile = Make_New_File();
 		
@@ -113,7 +115,7 @@ std::ofstream Make_New_File(){
 	std::string newfilename;
 	std::cin >> newfilename;
 	
-	newfile.open(newfilename, std::ofstream::out | std::ofstream::trunc);
+	newfile.open("samplefiles/" + newfilename, std::ofstream::out | std::ofstream::trunc);
 	
 	
 	return newfile;
@@ -122,11 +124,11 @@ std::ofstream Make_New_File(){
 
 
 void userstringinput(){
+
 	std::string phrase;
 	TextParser tp;
-	std::ofstream newfile = Make_New_File();
 	
-	std::cout<< "Enter the phrase you want to encrypt/decrypt,\nmake sure you use the cipher properly, wrong \ncodes will eject the function\n";
+	std::cout<< "\nEnter the phrase you want to encrypt/decrypt\n>>";
 	std::cin.ignore();
 	std::getline(std::cin, phrase);
 	
@@ -134,7 +136,7 @@ void userstringinput(){
 	BinaryTree* bTree = tp.GetCipherTree();
 	bool encrypting = false;
 	
-	//Checks for a new character not in tree
+	//Checks for a new character not in table
 	for(char c : phrase){
 		if(table->find(c) == nullptr && c != ' '){
 			
@@ -145,11 +147,9 @@ void userstringinput(){
 			
 			table->insert(c)->value = newpath;
 			
-			
 		}
 		if(!tp.isbinary(c) || c == ' '){
 			encrypting = true;
-			break;
 		}
 		
 	}
@@ -159,7 +159,6 @@ void userstringinput(){
 	}else{
 		tp.decryption(phrase);
 	}
-	
 	//Cosmetic
 	std::string output = tp.GetResult();
 	
@@ -167,11 +166,10 @@ void userstringinput(){
 	std::cout << linebreaker << output << linebreaker;
 	
 
-	std::cout << "Would you like to save it?\n";
+	std::cout << "Would you like to save it? (y/n)\n";
 	if(yesnoloop('y', 'n')){
 		std::ofstream newfile = Make_New_File();
 		
 		newfile << output;
 	}
-	
 }

@@ -68,15 +68,11 @@ HTNode* HashTable::insert(char input){
 		table[h] = newnode;
 		return newnode;
 	}
-	
-/************************************/
 	//if it is the first one
 	if(trav->key == input) {
 		delete newnode;
 		return trav;
 	}
-	
-	
 	//if there is a collision
 	//start finding the end list and append there
 	while(trav->next != nullptr){

@@ -13,16 +13,19 @@ TextParser::~TextParser(){
 
 bool TextParser::setfile(std::string input){
 	file_to_open = input;
-	/*
+	
+	
+	if(file.is_open()){
+		file.close();
+	}
+
+	file.open(file_to_open);
 	//Check for if there is no file
 	if(!file.is_open()) return false;
 	
 	//check for if there was a previously opened file
-	if(file.is_open()){
-		file.close();
-	}
-	*/
-	file.open(file_to_open);
+
+	
 	
 	
 	return true;
@@ -99,21 +102,27 @@ bool TextParser::encryption(std::string s){
 	std::string code;
 	
 	//iterate through the input
-	for(unsigned int i = 0; i < s.size(); i++){
-		if(s[i] == ' ') {
+	for(char c : s){
+		if(c == ' ') {
 			code += ' ';
 		}
 		else {
-
-			code += ciphertable.find(s[i])->value + " ";
+			if(ciphertable.find(c) == nullptr){
+				
+				std::cout << "created" << c;
+				std::string newpath = ciphertree.find_next();
+				//creates a new node where a new path was found
+				ciphertree.append(c, newpath);
+				
+				ciphertable.insert(c)->value = newpath;
+			
+			}
+			code += ciphertable.find(c)->value + " ";
 		}
 	}
-	resultingtext = code;
+	resultingtext += code;
 	
 	return true;
-}
-std::string TextParser::GetResult(){
-		return resultingtext;
 }
 //Scans through each character, if it is has a non-binary character, then it exits
 bool TextParser::decryption(std::string s){
@@ -160,7 +169,7 @@ bool TextParser::decryption(std::string s){
 			
 			//Get the data from the tree
 			BTNode* walker = ciphertree.Traverse(path);
-			//std::cout << walker->data << " " ;
+			std::cout << path << " " << walker->data << " " ;
 			resultingtext += walker->data;
 		}
 		
@@ -170,27 +179,39 @@ bool TextParser::decryption(std::string s){
 	
 	return true;
 }
+
+
+std::string TextParser::GetResult(){
+		return resultingtext;
+}
 bool TextParser::init(){
+	resultingtext = "";
 	if(!file.is_open()){
 		std::cout <<"File Not open\n";
 		return false;
 	}
 	//bool encrypting = false;
-	std::string s;
+	
+		std::string s;
 	while(file){
-		getline(file, s);
-		std::string word;
+		
+		std::getline(file, s);
 		
 		
 		bool encrypting = false;
 		std::cout << "Starting new line:\nChecking for alphabetical letters...\n";
 		
-		//Detects whether or not we do encryption
+//Prescan
 		for(char c : s){
-			if(!isbinary(c) || c == ' '){
+			
+		//Detects whether or not we do encryption
+			if(!isbinary(c) && c != ' '){
 				encrypting = true;
 				break;
 			}
+
+
+
 		}
 		
 		if(encrypting){
