@@ -9,8 +9,8 @@
 #include "source/textparser.h"
 
 bool yesnoloop(char positive, char negative);
-void userstringinput();
-void choosefile();
+void userstringinput(TextParser& tp);
+void choosefile(TextParser& tp);
 std::ofstream Make_New_File();
 
 std::string linebreaker = "\n======= ======= ======= =======\n\n";
@@ -21,7 +21,7 @@ int main(){
 	std::cout << "Enter y to continue or n to quit: ";
 	bool keeprunning = true;
 	
-	
+	TextParser tp;
 	while(keeprunning){
 		
 		if(!yesnoloop('y','n')) break;
@@ -34,10 +34,10 @@ int main(){
 			switch(choice){
 				
 				case '1':
-					choosefile();
+					choosefile(tp);
 				break;
 				case '2':
-					userstringinput();
+					userstringinput(tp);
 				break;
 				default:
 				std::cout << "Invalid input, please use the available options\n";
@@ -45,7 +45,7 @@ int main(){
 			}
 		}while(choice != '1' && choice != '2');
 		
-		std::cout << "Do you want to continue? (y/n): ";
+		std::cout << "\nDo you want to continue? (y/n): ";
 	}
 	
 	
@@ -74,10 +74,9 @@ bool runagain(){
 	return yesnoloop('y', 'n');
 	
 }
-void choosefile(){
+void choosefile(TextParser& tp){
 	std::string filename;
-	
-	TextParser tp;
+
 	
 	std::cout << "\nEnter file name that exists in the samplefiles folder \"____\"\n";
 	std::cin >> filename;
@@ -124,10 +123,10 @@ std::ofstream Make_New_File(){
 
 
 
-void userstringinput(){
+void userstringinput(TextParser& tp){
 
 	std::string phrase;
-	TextParser tp;
+
 	
 	std::cout<< "\nEnter the phrase you want to encrypt/decrypt\n>>";
 	std::cin.ignore();
@@ -149,7 +148,7 @@ void userstringinput(){
 			table->insert(c)->value = newpath;
 			
 		}
-		if(!tp.isbinary(c) || c == ' '){
+		if(!tp.isbinary(c) || c != ' '){
 			encrypting = true;
 		}
 		

@@ -138,9 +138,6 @@ bool TextParser::decryption(std::string s){
 			
 			
 			path.erase(path.begin(), path.end());
-		}else if(s[i] == '\n')
-		{
-			list_of_paths.push("\n");
 		}
 		else{
 			path += s[i];
@@ -233,6 +230,6 @@ bool TextParser::init(){
 	return true;
 }
 
-std::string GetPreText(){
+std::string TextParser::GetPreText(){
 	return pretext;
 }
