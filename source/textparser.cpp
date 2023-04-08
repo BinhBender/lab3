@@ -189,32 +189,23 @@ bool TextParser::init(){
 		
 		bool encrypting = false;
 		std::cout << "Starting new line:\nChecking for alphabetical letters...\n";
-		
-//Prescan
+		//Scan for if there is an alphabetical character or not
 		for(int i = 0; i < s.size(); i++){
 			
-		//Detects whether or not we do encryption
+		//Decides whether or not we do encryption/decryption
 			if(!isbinary(s[i]) && s[i] != ' '){
 				encrypting = true;
-				
-				
 			}
-
 			if(ciphertable.find(s[i]) == nullptr && s[i] != ' ' && !isbinary(s[i])){
 					
 				std::cout << "created" << s[i];
 				std::string newpath = ciphertree.find_next();
-					//creates a new node where a new path was found
-					
+				//creates a new node where a new path was found
 				ciphertree.append(s[i], newpath);
 					
 				ciphertable.insert(s[i])->value = newpath;
-			
 			}
-
-
 		}
-		
 		if(encrypting){
 			std::cout << "Founded lexiconic letters, beginning encryption\n";
 			encryption(s);
@@ -225,7 +216,6 @@ bool TextParser::init(){
 			decryption(s);
 		}
 	}
-	
 	file.close();
 	return true;
 }
