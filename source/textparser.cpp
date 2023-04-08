@@ -196,7 +196,7 @@ bool TextParser::init(){
 			if(!isbinary(s[i]) && s[i] != ' '){
 				encrypting = true;
 			}
-			if(ciphertable.find(s[i]) == nullptr && s[i] != ' ' && !isbinary(s[i])){
+			if(ciphertable.find(s[i]) == nullptr && s[i] != ' '){
 					
 				std::cout << "created" << s[i];
 				std::string newpath = ciphertree.find_next();
@@ -208,6 +208,7 @@ bool TextParser::init(){
 		}
 		if(encrypting){
 			std::cout << "Founded lexiconic letters, beginning encryption\n";
+			pretext += s;
 			encryption(s);
 		}
 		else{
