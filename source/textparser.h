@@ -28,8 +28,12 @@ private:
 
 	
 public:
-
+//Order of operations
+//Set the file 
+	
+	void add_to_table_and_tree(char value);
 	bool setfile(std::string);
+	
 	bool init();
 	
 	bool isbinary(char);

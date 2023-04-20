@@ -27,15 +27,14 @@ int main(){
 		if(!yesnoloop('y','n')) break;
 		
 		char choice;
-		
 		do{
 			std::cout << "\n1 - Choose a file to encode/decode\n\n2 - Type a message in the console to encode/decode\n";
 			std::cin >> choice;
 			switch(choice){
-				
 				case '1':
 					choosefile(tp);
 				break;
+				
 				case '2':
 					userstringinput(tp);
 				break;
@@ -139,14 +138,8 @@ void userstringinput(TextParser& tp){
 	//Checks for a new character not in table
 	for(char c : phrase){
 		if(table->find(c) == nullptr && c != ' '){
-			
-			
-			std::string newpath = bTree->find_next();
-			//creates a new node where a new path was found
-			bTree->append(c, newpath);
-			
-			table->insert(c)->value = newpath;
-			
+			//If there is not a new character, input it.
+			tp.add_to_table_and_tree(c);
 		}
 		if(!tp.isbinary(c) || c != ' '){
 			encrypting = true;
